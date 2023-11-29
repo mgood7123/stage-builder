@@ -38,10 +38,7 @@ jobs:
 
       - name: load docker image
         run: |
-          IMG=$(sudo docker image load -i ./ubuntu.tar)
-          echo "IMG = '$IMG'"
-          sudo docker image ls -a
-          sudo docker image tag $IMG git_local_ubuntu
+          sudo docker image load -i ./ubuntu.tar
       
       - name: list docker images
         run: |
