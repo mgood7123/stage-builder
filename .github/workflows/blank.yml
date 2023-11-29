@@ -46,7 +46,7 @@ jobs:
 
       - name: create docker container
         run: |
-          sudo docker container create --user ubuntu --workdir /home/ubuntu --init --interactive --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
+          sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
 
       - name: start docker container
         run: |
@@ -54,4 +54,4 @@ jobs:
       
       - name: run command
         run: |
-          sudo docker container exec git_local_ubuntu bash -i -c "bash --help"
+          sudo docker container exec git_local_ubuntu bash -c "bash --help"
