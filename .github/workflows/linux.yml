@@ -76,7 +76,7 @@ jobs:
 
       - name: boot systemd - start systemd container
         run: |
-          sudo docker container start git_local_ubuntu
+          sudo docker container start git_local_ubuntu -i
 
       - name: boot systemd - verify
         run: |
