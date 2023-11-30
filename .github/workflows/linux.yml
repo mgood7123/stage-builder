@@ -120,7 +120,8 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo apt install -y clang-17"
           sudo docker cp ./update_alternatives_clang.sh git_local_ubuntu:/home/ubuntu/update_alternatives_clang.sh
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "chmod +x update_alternatives_clang.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chmod +x update_alternatives_clang.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu update_alternatives_clang.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "./update_alternatives_clang.sh 17"
 
       - name: compile program
