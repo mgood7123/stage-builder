@@ -1,0 +1,32 @@
+name: build android
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: android 21
+            android: 21
+          - os: ubuntu-latest
+            name: android 26
+            android: 26
+
+    runs-on: ${{ matrix.os }}
+
+    name: build (${{ matrix.name }})
+
+    steps:
+
+      - name: ${{ matrix.os }} - android
+        if: ${{ matrix.android }}
+        run: echo ${{ matrix.os }} - ANDROID
