@@ -76,7 +76,7 @@ jobs:
 
       - name: install flatpak
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "sudo apt install flatpak"
+          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y flatpak"
 
       - name: add flatpak repository
         run: |
