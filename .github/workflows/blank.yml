@@ -28,22 +28,26 @@ jobs:
           - os: windows-latest
           - os: ubuntu-latest
           - os: ubuntu-latest
-            android-target: [21, 26]
+            android: 21
+            android: 26
           - os: macos-latest
 
     runs-on: ${{ matrix.os }}
-    name: Run build session ${{ matrix.os }} api ${{ matrix.android-target }}
+    if: ${{ matrix.android }}
+    name: build (android - api ${{matrix.android}})
+    if: ${{ ! matrix.android }}
+    name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       - name: ${{ matrix.os }} - android
-        if: ${{ matrix.android-target }}
+        if: ${{ matrix.android }}
         run: echo ${{ matrix.os }} - ANDROID
 
       - name: ${{ matrix.os }}
-        if: ${{ ! matrix.android-target }}
+        if: ${{ ! matrix.android }}
         run: echo ${{ matrix.os }}
     
   #     - name: uncompress docker image
