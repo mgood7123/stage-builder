@@ -67,7 +67,7 @@ jobs:
 
       - name: Setup ssh session
         uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 5
+        timeout-minutes: 50
       
       - name: compile program
         run: |
