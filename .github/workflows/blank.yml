@@ -21,8 +21,8 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  # uncompress docker container:
-  build inside docker container:
+  # uncompress_docker_container:
+  build_inside_docker_container:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
