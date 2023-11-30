@@ -38,9 +38,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: ${{ matrix.os }} - android
+      - name: call android
         if: ${{ matrix.android }}
-        run: echo ${{ matrix.os }} - ANDROID
+        call ./github/workflows/android.yaml
+
+      # - name: ${{ matrix.os }} - android
+      #   if: ${{ matrix.android }}
+      #   run: echo ${{ matrix.os }} - ANDROID
 
       - name: ${{ matrix.os }}
         if: ${{ ! matrix.android }}
