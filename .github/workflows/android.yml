@@ -96,7 +96,7 @@ jobs:
       
       - name: compile program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "/lib/android-sdk/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/${{ matrix.prefix }}${{ matrix.android }}-clang program.c -O3 -g0 -o program-android-${{ matrix.android }}-${{ matrix.arch }}"
+          sudo docker container exec git_local_ubuntu bash -c "/lib/android-sdk/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/${{ matrix.clang_prefix }}${{ matrix.android }}-clang program.c -O3 -g0 -o program-android-${{ matrix.android }}-${{ matrix.arch }}"
       
       - name: copy program
         run: |
