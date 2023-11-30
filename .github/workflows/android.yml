@@ -73,7 +73,11 @@ jobs:
         run: |
           sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
 
-      - name: install perl readline
+      - name: install apt-utils
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y apt-utils"
+
+      - name: install perl-readline
         run: |
           sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y libterm-readline-gnu-perl"
 
