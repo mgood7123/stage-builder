@@ -37,9 +37,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - if ${{ matrix.android }}
-        name: android
-        run: echo "ANDROID"
+      - name: android
+        if: ${{ matrix.android }}
+        run: echo ${{ matrix.os }} - ANDROID
+
+      - name: ${{ matrix.os }}
+        if: ${{ ! matrix.android }}
+        run: echo ${{ matrix.os }}
     
   #     - name: uncompress docker image
   #       run: |
