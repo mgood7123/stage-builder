@@ -45,9 +45,9 @@ jobs:
         run: |
           sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
 
-      - name: install clang
+      - name: install perl readline
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y clang"
+          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y libterm-readline-gnu-perl"
 
       - name: generate program
         run: |
@@ -56,6 +56,10 @@ jobs:
       - name: cat program
         run: |
           sudo docker container exec git_local_ubuntu bash -c "cat program.c"
+
+      - name: install clang
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y clang"
 
       - name: compile program
         run: |
