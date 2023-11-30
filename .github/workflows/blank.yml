@@ -42,9 +42,10 @@ jobs:
         run: |
           sudo docker image ls -a
 
-  install-create-container:
+  create-ubuntu-container:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    needs: install-docker-container
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -64,6 +65,13 @@ jobs:
         run: |
           sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
       
+  run-ubuntu-container:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: create-ubuntu-container
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
       - name: run command
         run: |
           sudo docker container exec git_local_ubuntu bash -c "sudo bash --help"
