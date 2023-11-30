@@ -26,50 +26,41 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: uncompress docker image
-        if: ${{ matrix.linux }}
         run: |
           xz -d ./ubuntu.tar.xz
 
       - name: load docker image
-        if: ${{ matrix.linux }}
         run: |
           sudo docker image load -i ./ubuntu.tar
 
       - name: create docker container
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
 
       - name: start docker container
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container start git_local_ubuntu
       
       - name: allow ubuntu user to sudo
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
 
       - name: install clang
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y clang"
 
       - name: generate program
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello1\n2\\n3\\\n4\\\\n5\\\\n\\\"); return 0; }\" > program.c"
+
       - name: cat program
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec git_local_ubuntu bash -c "cat program.c"
 
       - name: compile program
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program"
 
       - name: execute program
-        if: ${{ matrix.linux }}
         run: |
           sudo docker container exec git_local_ubuntu bash -c "./program"
