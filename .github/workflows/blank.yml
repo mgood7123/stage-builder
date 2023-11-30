@@ -90,7 +90,10 @@ jobs:
       - name: generate program
         if: ${{ matrix.linux }}
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello\\\\n\\\"); return 0; }\" > program.c"
+          sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello1\n2\\n3\\\n4\\\\n5\\\\n\\\"); return 0; }\" > program.c"
+      - name: cat program
+        if: ${{ matrix.linux }}
+        run: |
           sudo docker container exec git_local_ubuntu bash -c "cat program.c"
 
       - name: compile program
