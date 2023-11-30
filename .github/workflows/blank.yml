@@ -35,7 +35,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     
-    name: ${{ matrix.android && build || nobuild }}
+    name: ${{ matrix.android && 'build' || 'nobuild' }}
     
     #name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
