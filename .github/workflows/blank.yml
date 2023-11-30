@@ -54,4 +54,4 @@ jobs:
       
       - name: run command
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "bash --help"
+          sudo docker container exec git_local_ubuntu bash -c "sudo bash --help"
