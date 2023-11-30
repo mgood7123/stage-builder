@@ -106,27 +106,27 @@ jobs:
 
       - name: boot systemd - verify
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "systemctl status"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "systemctl status"
 
       - name: generate program
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"Hello World!\\\\\n\\\"); return 0; }\n\" > program.c"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"Hello World!\\\\\n\\\"); return 0; }\n\" > program.c"
 
       - name: cat program
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "cat program.c"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat program.c"
 
       - name: install clang
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "sudo apt install -y clang"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo apt install -y clang"
 
       - name: compile program
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program-linux"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program-linux"
 
       - name: execute program
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "./program-linux"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "./program-linux"
 
       - name: copy program
         run: |
@@ -134,55 +134,55 @@ jobs:
 
       - name: install flatpak
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "sudo apt install -y flatpak"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo apt install -y flatpak"
 
       - name: add flatpak repository
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
 
       - name: install flatpak builder
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak install flathub org.flatpak.Builder"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak install flathub org.flatpak.Builder"
 
       - name: install flatpak sdk
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak install flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak install flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08"
 
       - name: write flatpak manifest
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"app-id: ${{ matrix.flatpak_id }}\" > ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"    build-commands:\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"      - install -D program-linux /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"    sources:\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo \"      - path: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"app-id: ${{ matrix.flatpak_id }}\" > ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    build-commands:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - install -D program-linux /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    sources:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - path: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
         
       - name: build flatpak package
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
 
       - name: execute flatpak package - install
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak-builder --user --install --force-clean build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak-builder --user --install --force-clean build-dir ${{ matrix.flatpak_id }}.yml"
 
       - name: execute flatpak package - run
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "flatpak run ${{ matrix.flatpak_id }}"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run ${{ matrix.flatpak_id }}"
 
       - name: copy flatpak package - tar
         run: |
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "mkdir flatpak-package"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "mv build-dir ${{ matrix.flatpak_id }}.yml flatpak-package"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo "flatpak-builder --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "echo "chmod +x flatpak-package/install.sh"
-          sudo docker container exec --user ubuntu git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mkdir flatpak-package"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv build-dir ${{ matrix.flatpak_id }}.yml flatpak-package"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "flatpak-builder --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "chmod +x flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
 
       - name: copy flatpak package - copy
         run: |
