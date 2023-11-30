@@ -19,7 +19,7 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # 1 job
-  build_inside_docker_container:
+  build:
     # use a strategy matrix to run this job on multiple OS's
     strategy:
       matrix:
@@ -36,6 +36,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+
+      - if ${{ matrix.android }}
+        name: android
+        run: echo "ANDROID"
     
   #     - name: uncompress docker image
   #       run: |
