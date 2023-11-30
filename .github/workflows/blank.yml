@@ -34,9 +34,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     if: ${{ matrix.android }}
-      name: build (android - api ${{matrix.android}})
-    else:
-      name: build (${{ matrix.os }})
+    name: build (android - api ${{matrix.android}})
+    #name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
