@@ -105,5 +105,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: program-android-${{ matrix.android }}-${{ matrix.arch }}
-          path: 
+          path: ./program-android-${{ matrix.android }}-${{ matrix.arch }}
           retention-days: 1

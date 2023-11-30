@@ -76,5 +76,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: program-linux
-          path: 
+          path: ./program-linux
           retention-days: 1
