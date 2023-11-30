@@ -72,7 +72,7 @@ jobs:
 
       - name: boot systemd - host inspect cgroups
         run: |
-          ls -lah /sys/fs/cgroups
+          ls -lah /sys/fs/cgroup
 
       - name: boot systemd - host systemd status
         run: |
