@@ -39,9 +39,7 @@ jobs:
 
       - name: ${{ matrix.os }} - android
         if: ${{ matrix.android-target }}
-        run: echo ${{ matrix.os }} - ${{ version }}
-        with:
-          version: ${{ matrix.android-target }}
+        run: echo ${{ matrix.os }} - ANDROID
 
       - name: ${{ matrix.os }}
         if: ${{ ! matrix.android-target }}
