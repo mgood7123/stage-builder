@@ -70,6 +70,19 @@ jobs:
         run: |
           sudo docker container rm git_local_ubuntu
 
+      - name: boot systemd - create systemd container inspect mount
+        run: |
+          sudo docker container create --user root --workdir /home/root --tmpfs /tmp --tty --cap-add SYS_ADMIN --privileged --security-opt apparmor:unconfined --ulimit nofile=262144:262144 -v /sys/fs/cgroup:/sys/fs/cgroup:rw --name git_local_ubuntu git_local_ubuntu:23.10 /bin/mount
+
+      - name: boot systemd - start systemd container inspect mount
+        run: |
+          sudo docker container start git_local_ubuntu -i
+
+      - name: boot systemd - start systemd container remove mount
+        run: |
+          sudo docker container stop git_local_ubuntu
+          sudo docker container rm git_local_ubuntu
+
       - name: boot systemd - create systemd container
         run: |
           sudo docker container create --user root --workdir /home/root --tmpfs /tmp --tty --cap-add SYS_ADMIN --privileged --security-opt apparmor:unconfined --ulimit nofile=262144:262144 -v /sys/fs/cgroup:/sys/fs/cgroup:rw --name git_local_ubuntu git_local_ubuntu:23.10 /sbin/init
