@@ -81,9 +81,9 @@ jobs:
   # #       with:
   # #         name: ubuntu
 
-  #     - name: load docker image
-  #       run: |
-  #         sudo docker image load -i ./ubuntu.tar
+      - name: load docker image
+        run: |
+          sudo docker image load -i ./ubuntu.tar
 
   #     - name: create docker container
   #       run: |
