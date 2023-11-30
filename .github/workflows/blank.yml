@@ -26,16 +26,21 @@ jobs:
         include:
           # we run on windows, linux, linux-android, and macos
           - os: windows-latest
+            name: windows
           - os: ubuntu-latest
+            name: ubuntu
           - os: ubuntu-latest
+            name: android 21
             android: 21
           - os: ubuntu-latest
+            name: android 26
             android: 26
           - os: macos-latest
+            name: macos
 
     runs-on: ${{ matrix.os }}
     
-    name: ${{ matrix.android && 'build ${{matrix.android}}' || 'nobuild' }}
+    name: build (${{ matrix.name }})
     
     #name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
