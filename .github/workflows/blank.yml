@@ -34,14 +34,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      with:
-        version: ${{ matrix.android-target }}
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       - name: ${{ matrix.os }} - android
         if: ${{ matrix.android-target }}
-        run: echo ${{ matrix.os }} - ANDROID
+        run: echo ${{ matrix.os }} - ${{ version }}
+        with:
+          version: ${{ matrix.android-target }}
 
       - name: ${{ matrix.os }}
         if: ${{ ! matrix.android-target }}
