@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         include:
-          # we run on windows, linux, linux-android, and macos
+          # we run on windows, linux, android, and macos
           - os: windows-latest
             name: windows
           - os: ubuntu-latest
@@ -33,8 +33,8 @@ jobs:
             name: android 21
             android: 21
           - os: ubuntu-latest
+            name: android 26
             android: 26
-            name: android ${{ matrix.android }}
           - os: macos-latest
             name: macos
 
@@ -48,13 +48,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: ${{ matrix.os }} - android
-        if: ${{ matrix.android }}
-        run: echo ${{ matrix.os }} - ANDROID
+      - if: ${{ matrix.android }}
+        - name: ${{ matrix.os }} - android
+          run: echo ${{ matrix.os }} - ANDROID
 
-      - name: ${{ matrix.os }}
-        if: ${{ ! matrix.android }}
-        run: echo ${{ matrix.os }}
+      - if: ${{ ! matrix.android }}
+        - name: ${{ matrix.os }}
+          run: echo ${{ matrix.os }}
     
   #     - name: uncompress docker image
   #       run: |
