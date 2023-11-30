@@ -1,7 +1,13 @@
 name: build android
 
 on:
-  workflow_call:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
@@ -20,7 +26,30 @@ jobs:
     name: build (${{ matrix.name }})
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
-      - name: ${{ matrix.os }} - android
-        if: ${{ matrix.android }}
-        run: echo ${{ matrix.os }} - ANDROID
+      - name: uncompress docker image
+        if: ${{ matrix.linux }}
+        run: |
+          xz -d ./ubuntu.tar.xz
+
+      - name: load docker image
+        if: ${{ matrix.linux }}
+        run: |
+          sudo docker image load -i ./ubuntu.tar
+
+      - name: create docker container
+        if: ${{ matrix.linux }}
+        run: |
+          sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
+
+      - name: start docker container
+        if: ${{ matrix.linux }}
+        run: |
+          sudo docker container start git_local_ubuntu
+      
+      - name: allow ubuntu user to sudo
+        if: ${{ matrix.linux }}
+        run: |
+          sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"

@@ -1,0 +1,29 @@
+name: build-all
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            name: macos
+
+    runs-on: ${{ matrix.os }}
+    
+    name: build (${{ matrix.name }})
+    
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: TODO - BUILD ON MAC OS
+        run: echo TODO

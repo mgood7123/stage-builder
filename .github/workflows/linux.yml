@@ -1,4 +1,4 @@
-name: build-all
+name: build linux
 
 on:
   push:
@@ -14,21 +14,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
-            name: windows
-            windows: true
           - os: ubuntu-latest
-            name: ubuntu
-            linux: true
-          - os: ubuntu-latest
-            name: android 21
-            android: 21
-          - os: ubuntu-latest
-            name: android 26
-            android: 26
-          - os: macos-latest
-            name: macos
-            macos: true
+            name: linux
 
     runs-on: ${{ matrix.os }}
     
@@ -38,32 +25,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: call android
-        if: ${{ matrix.android }}
-        uses: ./github/workflows/android.yaml
-
-      - name: ${{ matrix.os }} - android
-        if: ${{ matrix.android }}
-        run: echo ${{ matrix.os }} - ANDROID
-
-      - name: ${{ matrix.os }}
-        if: ${{ ! matrix.android }}
-        run: echo ${{ matrix.os }}
-    
       - name: uncompress docker image
         if: ${{ matrix.linux }}
         run: |
           xz -d ./ubuntu.tar.xz
-
-  #     # - uses: actions/upload-artifact@v3
-  #     #   with:
-  #     #     name: ubuntu
-  #     #     path: ubuntu.tar
-  #     #     retention-days: 1
-
-  #     # - uses: actions/download-artifact@v3
-  #     #   with:
-  #     #     name: ubuntu
 
       - name: load docker image
         if: ${{ matrix.linux }}
@@ -84,7 +49,6 @@ jobs:
         if: ${{ matrix.linux }}
         run: |
           sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
-
 
       - name: install clang
         if: ${{ matrix.linux }}
