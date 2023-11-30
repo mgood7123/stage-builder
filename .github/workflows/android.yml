@@ -65,10 +65,9 @@ jobs:
         run: |
           sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y google-android-ndk-r25c-installer"
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          wait-timeout-minutes: 5
+      - name: Setup ssh session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 5
       
       - name: compile program
         run: |
