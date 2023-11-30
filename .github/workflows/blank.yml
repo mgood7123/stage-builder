@@ -28,11 +28,12 @@ jobs:
           - os: windows-latest
           - os: ubuntu-latest
           - os: ubuntu-latest
-            android-target: [ android: [21, 26]]
+            android-target: [21, 26]
           - os: macos-latest
 
     runs-on: ${{ matrix.os }}
-
+    with:
+      version: ${{ matrix.android-target }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
