@@ -1,14 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: build-linux
+name: build-all
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow when the "main" branch is pushed to
   push:
     branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,69 +18,77 @@ defaults:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  # uncompress_docker_container:
+  # 1 job
   build_inside_docker_container:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    # use a strategy matrix to run this job on multiple OS's
+    strategy:
+      matrix:
+        # we run on windows, linux, and macos
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        include:
+          # we also run on android but only build on linux
+          #   no point building for android on multiple OS's
+          - os: ubuntu-latest
+            android: [21, 26]
+    runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
     
-      - name: uncompress docker image
-        run: |
-          xz -d ./ubuntu.tar.xz
+  #     - name: uncompress docker image
+  #       run: |
+  #         xz -d ./ubuntu.tar.xz
 
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ubuntu
-      #     path: ubuntu.tar
-      #     retention-days: 1
+  #     # - uses: actions/upload-artifact@v3
+  #     #   with:
+  #     #     name: ubuntu
+  #     #     path: ubuntu.tar
+  #     #     retention-days: 1
 
-  # we do not know how to persist docker containers without needing to re-initialize them
-  # build-something:
-  #   # The type of runner that the job will run on
-  #   runs-on: ubuntu-latest
-  #   needs: uncompress-docker-container
+  # # we do not know how to persist docker containers without needing to re-initialize them
+  # # build-something:
+  # #   # The type of runner that the job will run on
+  # #   runs-on: ubuntu-latest
+  # #   needs: uncompress-docker-container
 
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: ubuntu
+  # #   # Steps represent a sequence of tasks that will be executed as part of the job
+  # #   steps:
+  # #     - uses: actions/download-artifact@v3
+  # #       with:
+  # #         name: ubuntu
 
-      - name: load docker image
-        run: |
-          sudo docker image load -i ./ubuntu.tar
+  #     - name: load docker image
+  #       run: |
+  #         sudo docker image load -i ./ubuntu.tar
 
-      - name: create docker container
-        run: |
-          sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
+  #     - name: create docker container
+  #       run: |
+  #         sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
 
-      - name: start docker container
-        run: |
-          sudo docker container start git_local_ubuntu
+  #     - name: start docker container
+  #       run: |
+  #         sudo docker container start git_local_ubuntu
       
-      - name: allow ubuntu user to sudo
-        run: |
-          sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
+  #     - name: allow ubuntu user to sudo
+  #       run: |
+  #         sudo docker container exec --user root git_local_ubuntu bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ubuntu"
 
 
-      - name: install clang
-        run: |
-          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y clang"
+  #     - name: install clang
+  #       run: |
+  #         sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y clang"
 
-      - name: generate program
-        run: |
-          sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello\\\\n\\\"); return 0; }\" > program.c"
-          sudo docker container exec git_local_ubuntu bash -c "cat program.c"
+  #     - name: generate program
+  #       run: |
+  #         sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello\\\\n\\\"); return 0; }\" > program.c"
+  #         sudo docker container exec git_local_ubuntu bash -c "cat program.c"
 
-      - name: compile program
-        run: |
-          sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program"
+  #     - name: compile program
+  #       run: |
+  #         sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program"
 
-      - name: execute program
-        run: |
-          sudo docker container exec git_local_ubuntu bash -c "./program"
+  #     - name: execute program
+  #       run: |
+  #         sudo docker container exec git_local_ubuntu bash -c "./program"
