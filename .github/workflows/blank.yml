@@ -34,7 +34,7 @@ jobs:
             android: 21
           - os: ubuntu-latest
             android: 26
-            name: android ${{ android }}
+            name: android ${{ matrix.android }}
           - os: macos-latest
             name: macos
 
