@@ -37,6 +37,8 @@ jobs:
     
     if: ${{ matrix.android }}
     name: build (android - api ${{ matrix.android }})
+    if: ${{ ! matrix.android }}
+    name: build (android - api )
     
     #name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
