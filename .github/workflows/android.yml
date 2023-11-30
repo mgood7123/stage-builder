@@ -15,15 +15,39 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            name: android 19
+            android: 19
+            arch: 1686
+            clang_prefix: i686-linux-android
+          - os: ubuntu-latest
+            name: android 19
+            android: 19
+            arch: armv7a
+            clang_prefix: armv7a-linux-androideabi
+          - os: ubuntu-latest
             name: android 21
             android: 21
+            arch: 1686
+            clang_prefix: i686-linux-android
           - os: ubuntu-latest
-            name: android 26
-            android: 26
+            name: android 21
+            android: 21
+            arch: armv7a
+            clang_prefix: armv7a-linux-androideabi
+          - os: ubuntu-latest
+            name: android 21
+            android: 21
+            arch: x86_64
+            clang_prefix: x86_64-linux-android
+          - os: ubuntu-latest
+            name: android 21
+            android: 21
+            arch: aarch64
+            clang_prefix: aarch64-linux-android
 
     runs-on: ${{ matrix.os }}
 
-    name: build (${{ matrix.name }})
+    name: build (${{ matrix.name }} @ ${{ matrix.arch }})
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -63,16 +87,23 @@ jobs:
 
       - name: install NDK 25c
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y google-android-ndk-r25c-installer"
+          sudo docker container exec git_local_ubuntu bash -c "printf \"1\n\" | sudo apt install -y google-android-ndk-r25c-installer"
 
-      - name: Setup ssh session
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 50
+      # - name: Setup ssh session
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 50
+        # sudo docker container exec -it git_local_ubuntu bash -i
       
       - name: compile program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program"
-
-      - name: execute program
+          sudo docker container exec git_local_ubuntu bash -c "/lib/android-sdk/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/${{ matrix.prefix }}${{ matrix.android }}-clang program.c -O3 -g0 -o program-android-${{ matrix.android }}-${{ matrix.arch }}"
+      
+      - name: copy program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "./program"
+          sudo docker cp git_local_ubuntu:/home/ubuntu/program-android-${{ matrix.android }}-${{ matrix.arch }} ./program-android-${{ matrix.android }}-${{ matrix.arch }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: program-android-${{ matrix.android }}-${{ matrix.arch }}
+          path: 
+          retention-days: 1

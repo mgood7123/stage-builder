@@ -63,8 +63,18 @@ jobs:
 
       - name: compile program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program"
+          sudo docker container exec git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program-linux"
 
       - name: execute program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "./program"
+          sudo docker container exec git_local_ubuntu bash -c "./program-linux"
+
+      - name: copy program
+        run: |
+          sudo docker cp git_local_ubuntu:/home/ubuntu/program-linux ./program-linux
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: program-linux
+          path: 
+          retention-days: 1
