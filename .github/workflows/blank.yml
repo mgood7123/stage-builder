@@ -28,7 +28,7 @@ jobs:
           - os: windows-latest
           - os: ubuntu-latest
           - os: ubuntu-latest
-            title: android
+            name: android
             android-target: [21, 26]
           - os: macos-latest
 
