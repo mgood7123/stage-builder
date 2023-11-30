@@ -24,12 +24,12 @@ jobs:
     strategy:
       matrix:
         # we run on windows, linux, and macos
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        os: [ windows-latest, ubuntu-latest, android-latest, macos-latest ]
         include:
           # we also run on android but only build on linux
           #   no point building for android on multiple OS's
-          - android: [21, 26]
-            os: ubuntu-latest
+          - os: ubuntu-latest
+            android: [21, 26]
     runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
