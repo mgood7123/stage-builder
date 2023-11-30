@@ -28,9 +28,14 @@ jobs:
         include:
           # we also run on android but only build on linux
           #   no point building for android on multiple OS's
-          - os: ubuntu-latest
+          - os: android-latest
             android: [21, 26]
-    runs-on: ${{ matrix.os }}
+
+    - runs-on: ${{ ubuntu-latest }}
+      if: ${{ matrix.android }}
+
+    - runs-on: ${{ matrix.os }}
+      if: ${{ ! matrix.android }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
