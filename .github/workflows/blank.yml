@@ -76,7 +76,7 @@ jobs:
 
       - name: generate program
         run: |
-          sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello\\\n\\\"); return 0; }\" > program.c"
+          sudo docker container exec git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"hello\\n\\\"); return 0; }\" > program.c"
 
       - name: compile program
         run: |
