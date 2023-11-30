@@ -39,7 +39,7 @@ jobs:
 
       - name: ${{ matrix.os }} - android
         if: ${{ matrix.android }}
-        run: echo ${{ matrix.os }} - ANDROID
+        run: echo ${{ matrix.os }} - ANDROID - ${{ matrix.android }}
 
       - name: ${{ matrix.os }}
         if: ${{ ! matrix.android }}
