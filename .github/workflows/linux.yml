@@ -16,6 +16,7 @@ jobs:
         include:
           - os: ubuntu-latest
             name: linux
+            flatpack_id: org.flatpak.Hello
 
     runs-on: ${{ matrix.os }}
     
@@ -73,8 +74,70 @@ jobs:
         run: |
           sudo docker cp git_local_ubuntu:/home/ubuntu/program-linux ./program-linux
 
+      - name: install flatpak
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "sudo apt install flatpak"
+
+      - name: add flatpak repository
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
+
+      - name: install flatpak builder
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak install flathub org.flatpak.Builder"
+
+      - name: install flatpak sdk
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak install flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08"
+
+      - name: write flatpak manifest
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "echo \"app-id: ${{ matrix.flatpak_id }}\" > ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"    build-commands:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"      - install -D program-linux /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"    sources:\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec git_local_ubuntu bash -c "echo \"      - path: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+        
+      - name: build flatpak package
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
+
+      - name: execute flatpak package - install
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak-builder --user --install --force-clean build-dir ${{ matrix.flatpak_id }}.yml"
+
+      - name: execute flatpak package - run
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "flatpak run ${{ matrix.flatpak_id }}"
+
+      - name: copy flatpak package - tar
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "mkdir flatpak-package"
+          sudo docker container exec git_local_ubuntu bash -c "mv build-dir ${{ matrix.flatpak_id }}.yml flatpak-package"
+          sudo docker container exec git_local_ubuntu bash -c "echo "flatpak-builder --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
+          sudo docker container exec git_local_ubuntu bash -c "echo "chmod +x flatpak-package/install.sh"
+          sudo docker container exec git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
+
+      - name: copy flatpak package - copy
+        run: |
+          sudo docker cp git_local_ubuntu:/home/ubuntu/flatpak-package.tar ./flatpak-package.tar
+
       - uses: actions/upload-artifact@v3
         with:
           name: program-linux
           path: ./program-linux
+          retention-days: 1
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: flatpak-package.tar
+          path: ./flatpak-package.tar
           retention-days: 1
