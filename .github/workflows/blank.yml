@@ -32,10 +32,10 @@ jobs:
           - os: macos-latest
 
     runs-on: ${{ matrix.os }}
-    with:
-      version: ${{ matrix.android-target }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      with:
+        version: ${{ matrix.android-target }}
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
