@@ -23,19 +23,15 @@ jobs:
     # use a strategy matrix to run this job on multiple OS's
     strategy:
       matrix:
-        # we run on windows, linux, and macos
-        os: [ windows-latest, ubuntu-latest, android-latest, macos-latest ]
         include:
-          # we also run on android but only build on linux
-          #   no point building for android on multiple OS's
-          - os: android-latest
-            android: [21, 26]
+          # we run on windows, linux, linux-android, and macos
+          - os: windows-latest
+          - os: ubuntu-latest
+          - os: ubuntu-latest
+            android-target: [21, 26]
+          - os: macos-latest
 
-    if: ${{ matrix.android }}
-      runs-on: ${{ ubuntu-latest }}
-
-    if: ${{ ! matrix.android }}
-      runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
