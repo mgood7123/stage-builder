@@ -78,6 +78,10 @@ function register_clang_version {
         --slave   /usr/bin/wasm-ld              wasm-ld              /usr/bin/wasm-ld-${version} \
         --slave   /usr/bin/yaml2obj             yaml2obj             /usr/bin/yaml2obj-${version}
         
+    update-alternatives \
+        --verbose \
+        --install /usr/bin/lldb                lldb                  /usr/bin/lldb-${version} ${priority} \
+        
 }
 
 register_clang_version $1
