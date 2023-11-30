@@ -45,23 +45,17 @@ jobs:
     #name: build (${{ matrix.os }})
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      if: ${{ matrix.android }}
-      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       - name: ${{ matrix.os }} - android
+        if: ${{ matrix.android }}
         run: echo ${{ matrix.os }} - ANDROID
-    
-    steps:
-      if: ${{ ! matrix.android }}
-      
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
 
       - name: ${{ matrix.os }}
+        if: ${{ ! matrix.android }}
         run: echo ${{ matrix.os }}
-
+    
   #     - name: uncompress docker image
   #       run: |
   #         xz -d ./ubuntu.tar.xz
