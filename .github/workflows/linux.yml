@@ -106,7 +106,7 @@ jobs:
       - name: boot systemd - start systemd container
         run: |
           sudo docker container start git_local_ubuntu
-          sudo docker container exec git_local_ubuntu bash -c "sleep 5 ; systemctl --wait is-system-running"
+          sudo docker container exec git_local_ubuntu bash -c "sleep 5 ; systemctl --wait is-system-running || sysctl --failed"
 
       - name: boot systemd - verify
         run: |
@@ -173,7 +173,7 @@ jobs:
       - name: reboot systemd - start systemd container
         run: |
           sudo docker container start git_local_ubuntu
-          sudo docker container exec git_local_ubuntu bash -c "sleep 5 ; systemctl --wait is-system-running"
+          sudo docker container exec git_local_ubuntu bash -c "sleep 5 ; systemctl --wait is-system-running || sysctl --failed"
 
       - name: reboot systemd - verify
         run: |
