@@ -199,7 +199,6 @@ jobs:
         
       - name: build flatpak package
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mkdir build-dir"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
 
       - name: execute flatpak package - install
