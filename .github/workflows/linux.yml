@@ -114,9 +114,10 @@ jobs:
 
       - name: create user session
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/\$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/\$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo systemctl start user@\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "mkdir -p /run/user/\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "chown ubuntu:ubuntu /run/user/\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl start user@\$(id -u ubuntu)"
+
       - name: generate program
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"Hello World!\\\\\n\\\"); return 0; }\n\" > program.c"
@@ -180,10 +181,9 @@ jobs:
 
       - name: create user session
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "id -u ubuntu > ubuntu.id"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/\$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/\$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo systemctl start user@\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "mkdir -p /run/user/\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "chown ubuntu:ubuntu /run/user/\$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl start user@\$(id -u ubuntu)"
 
       - name: SYSTEMD - add flatpak repository
         run: |
