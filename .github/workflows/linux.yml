@@ -207,7 +207,7 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
