@@ -114,9 +114,9 @@ jobs:
 
       - name: create user session
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo systemctl start user@$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo systemctl start user@$(id -u ubuntu)"
 
       - name: generate program
         run: |
@@ -181,9 +181,9 @@ jobs:
 
       - name: create user session
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu git_local_ubuntu bash -c "sudo systemctl start user@$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo systemctl start user@$(id -u ubuntu)"
 
       - name: add flatpak repository
         run: |
