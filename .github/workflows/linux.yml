@@ -209,6 +209,14 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"HOME = $HOME\""
 
+      - name: flatpak help
+        run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak --help"
+
+      - name: flatpak list
+        run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak list"
+
       - name: build flatpak package
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder build-dir ${{ matrix.flatpak_id }}.yml"
