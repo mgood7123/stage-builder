@@ -207,15 +207,15 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: \$HOME/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    build-commands:\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - install -D program-linux /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - install -D \$HOME/program-linux /app/bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    sources:\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        path: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        path: \$HOME/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
         
       - name: cat flatpak manifest
         run: |
