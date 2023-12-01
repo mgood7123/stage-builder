@@ -198,11 +198,11 @@ jobs:
         
       - name: build flatpak package
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder flatpak-builder build-dir ${{ matrix.flatpak_id }}.yml"
 
       - name: execute flatpak package - install
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak-builder --user --install --force-clean build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder flatpak-builder --user --install --force-clean build-dir ${{ matrix.flatpak_id }}.yml"
 
       - name: execute flatpak package - run
         run: |
@@ -212,7 +212,7 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mkdir flatpak-package"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv build-dir ${{ matrix.flatpak_id }}.yml flatpak-package"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "flatpak-builder --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "flatpak run org.flatpak.Builder flatpak-builder --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "chmod +x flatpak-package/install.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
 
