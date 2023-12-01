@@ -102,11 +102,17 @@ jobs:
       - name: boot systemd - start systemd container
         run: |
           sudo docker container start git_local_ubuntu
-          sleep 5
+          sudo docker container exec git_local_ubuntu bash -c "time systemctl --wait is-system-running"
 
       - name: boot systemd - verify
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "systemctl status"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl status"
+
+      - name: create user session
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "mkdir -p /run/user/$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl start user@$(id -u ubuntu)"
 
       - name: generate program
         run: |
@@ -118,14 +124,14 @@ jobs:
 
       - name: install clang-17
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo apt install -y clang-17 clang-format-17 lldb-17 lld-17 clang-tidy-17 clang-tools-17 flang-17 llvm-17-linker-tools llvm-17-tools llvm-17-runtime llvm-17-tools mlir-17-tools libmlir-17"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo apt install -y clang-17 clang-format-17 lldb-17 lld-17 clang-tidy-17 clang-tools-17 flang-17 llvm-17-linker-tools llvm-17-tools llvm-17-runtime llvm-17-tools mlir-17-tools libmlir-17\""
       
       - name: make clang-17 default
         run: |
           sudo docker cp ./update_alternatives_clang.sh git_local_ubuntu:/home/ubuntu/update_alternatives_clang.sh
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chmod +x update_alternatives_clang.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu update_alternatives_clang.sh"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo ./update_alternatives_clang.sh 17"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo ./update_alternatives_clang.sh 17\""
 
       - name: compile program
         run: |
@@ -141,7 +147,7 @@ jobs:
 
       - name: install flatpak
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo apt install -y flatpak"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo apt install -y flatpak\""
 
       - name: reboot systemd - commit image
         run: |
@@ -163,23 +169,29 @@ jobs:
       - name: reboot systemd - start systemd container
         run: |
           sudo docker container start git_local_ubuntu
-          sleep 5
+          sudo docker container exec git_local_ubuntu bash -c "time systemctl --wait is-system-running"
 
       - name: reboot systemd - verify
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "systemctl status"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl status"
+
+      - name: create user session
+        run: |
+          sudo docker container exec git_local_ubuntu bash -c "mkdir -p /run/user/$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "chown ubuntu:ubuntu /run/user/$(id -u ubuntu)"
+          sudo docker container exec git_local_ubuntu bash -c "systemctl start user@$(id -u ubuntu)"
 
       - name: add flatpak repository
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo\""
 
       - name: install flatpak builder
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo flatpak install -y flathub org.flatpak.Builder"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak install -y flathub org.flatpak.Builder\""
 
       - name: install flatpak sdk
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo flatpak install -y flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak install -y flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08\""
 
       - name: write flatpak manifest
         run: |
@@ -203,7 +215,7 @@ jobs:
 
       - name: print env
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "env"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"env\""
 
       - name: print HOME
         run: |
@@ -227,15 +239,15 @@ jobs:
 
       - name: build flatpak package
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak -vv run org.flatpak.Builder -v -y --user build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak -vv run org.flatpak.Builder -v -y --user build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: execute flatpak package - install
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak -vv run org.flatpak.Builder -v -y --user --install build-dir ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak -vv run org.flatpak.Builder -v -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: execute flatpak package - run
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run ${{ matrix.flatpak_id }}"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run ${{ matrix.flatpak_id }}\""
 
       - name: copy flatpak package - tar
         run: |
