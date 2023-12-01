@@ -239,11 +239,11 @@ jobs:
 
       - name: build flatpak package
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak -vv run org.flatpak.Builder -v -y --user build-dir ${{ matrix.flatpak_id }}.yml\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run org.flatpak.Builder -v -y --user build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: execute flatpak package - install
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak -vv run org.flatpak.Builder -v -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run org.flatpak.Builder -v -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: execute flatpak package - run
         run: |
