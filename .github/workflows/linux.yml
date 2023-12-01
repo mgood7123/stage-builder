@@ -216,7 +216,7 @@ jobs:
       - name: cat flatpak manifest
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ls -lah"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah"
 
       - name: SYSTEMD - print env
         run: |
