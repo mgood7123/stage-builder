@@ -58,6 +58,18 @@ jobs:
         run: |
           sudo docker container exec git_local_ubuntu bash -c "sudo apt install -y systemd systemd-sysv systemd-dev"
 
+      - name: host inspect cgroups
+        run: |
+          ls -lah /sys/fs/cgroup
+
+      - name: host inspect systemd status system
+        run: |
+          systemctl status --system
+
+      - name: host inspect systemd status user
+        run: |
+          systemctl status --user
+
       - name: boot systemd - commit image
         run: |
           sudo docker container commit git_local_ubuntu git_local_ubuntu:23.10
@@ -69,14 +81,6 @@ jobs:
       - name: boot systemd - remove container
         run: |
           sudo docker container rm git_local_ubuntu
-
-      - name: boot systemd - host inspect cgroups
-        run: |
-          ls -lah /sys/fs/cgroup
-
-      - name: boot systemd - host systemd status
-        run: |
-          systemctl status
 
       - name: boot systemd - host remount cgroup
         run: |
