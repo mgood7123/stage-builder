@@ -119,14 +119,11 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah /home/ubuntu/ubuntu.id"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah /home/ubuntu/ubuntu.id"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"echo1 = $(ls -lah /home/ubuntu/ubuntu.id)\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"echo2 = \$(ls -lah /home/ubuntu/ubuntu.id)\""
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo mkdir -p /run/user/$(cat /home/ubuntu/ubuntu.id)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah /home/ubuntu/ubuntu.id"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo chown ubuntu:ubuntu /run/user/$(cat /home/ubuntu/ubuntu.id)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah /home/ubuntu/ubuntu.id"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "sudo systemctl start user@$(cat /home/ubuntu/ubuntu.id)"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah /home/ubuntu/ubuntu.id"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"$(ls -lah /home/ubuntu/ubuntu.id)\""
-
       - name: generate program
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"Hello World!\\\\\n\\\"); return 0; }\n\" > program.c"
