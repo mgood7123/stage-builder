@@ -197,6 +197,10 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - path: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
         
+      - name: cat flatpak manifest
+        run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ${{ matrix.flatpak_id }}.yml"
+
       - name: print env
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "env"
