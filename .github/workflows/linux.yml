@@ -141,6 +141,10 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "clang program.c -O3 -g0 -o program-linux"
 
+      - name: lld program-linux
+        run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ldd program-linux"
+
       - name: execute program
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "./program-linux"
@@ -216,6 +220,7 @@ jobs:
       - name: cat flatpak manifest
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo pwd = \$(pwd)"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah"
 
       - name: SYSTEMD - print env
