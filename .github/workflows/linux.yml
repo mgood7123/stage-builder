@@ -223,7 +223,7 @@ jobs:
 
       - name: print HOME
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"HOME = $HOME\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"HOME = \$HOME\""
 
       - name: flatpak help
         run: |
