@@ -226,23 +226,34 @@ jobs:
         
       - name: SYSTEMD - build flatpak package
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"echo '${{ matrix.flatpak_id }}.yml: -- start'\""
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"cat ${{ matrix.flatpak_id }}.yml\""
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"echo '${{ matrix.flatpak_id }}.yml: -- end'\""
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"ls -lah \$HOME/program-linux\""
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak-builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: SYSTEMD - execute flatpak package - run
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run ${{ matrix.flatpak_id }}\""
 
-      - name: copy flatpak package - tar
+      - name: copy flatpak package - bundle
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak build-bundle export ${{ matrix.flatpak_id }}"
+
+      - name: copy flatpak package - mkdir
+        run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mkdir flatpak-package"
+
+      - name: copy flatpak package - mv
+        run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv ${{ matrix.flatpak_id }}.flatpak flatpak-package/${{ matrix.flatpak_id }}.flatpak"
+
+      - name: copy flatpak package - make install script
+        run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"flatpak install ${{ matrix.flatpak_id }}.flatpak" > flatpak-package/install.sh"
+
+      - name: copy flatpak package - chmod
+        run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "chmod +x flatpak-package/install.sh"
+
+      - name: copy flatpak package - tar
+        run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
 
       - name: copy flatpak package - copy
