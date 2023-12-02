@@ -246,11 +246,11 @@ jobs:
 
       - name: copy flatpak package - mv
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv ${{ matrix.flatpak_id }}.flatpak flatpak-package/${{ matrix.flatpak_id }}.flatpak"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv -v ${{ matrix.flatpak_id }}.flatpak flatpak-package/${{ matrix.flatpak_id }}.flatpak"
 
       - name: copy flatpak package - make install script
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"flatpak install ${{ matrix.flatpak_id }}.flatpak" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"flatpak install ${{ matrix.flatpak_id }}.flatpak\" > flatpak-package/install.sh"
 
       - name: copy flatpak package - chmod
         run: |
