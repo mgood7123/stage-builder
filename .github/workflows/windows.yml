@@ -25,5 +25,24 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: TODO - BUILD ON WINDOWS
-        run: echo TODO
+      - name: generate program
+        run: |
+          bash -c "printf \"#include <stdio.h>\nint main() { printf(\\\"Hello World!\\\\\n\\\"); return 0; }\n\" > program.c"
+
+      - name: cat program
+        run: |
+          cat program.c
+
+      - name: compile program
+        run: |
+          clang program.c -O3 -g0 -o program-linux
+
+      - name: execute program
+        run: |
+          ./program-linux
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: program-windows
+          path: ./program-windows
+          retention-days: 1

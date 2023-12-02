@@ -16,7 +16,7 @@ jobs:
         include:
           - os: ubuntu-latest
             name: linux
-            flatpak_id: org.flatpak.Hello
+            flatpak_id: smallville7123.Hello
 
     runs-on: ${{ matrix.os }}
     
