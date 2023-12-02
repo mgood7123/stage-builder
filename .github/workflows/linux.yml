@@ -217,7 +217,7 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime: org.freedesktop.Platform\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"runtime-version: '23.08'\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sdk: org.freedesktop.Sdk\" >> ${{ matrix.flatpak_id }}.yml"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: /bin/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"command: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"modules:\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"  - name: hello\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    buildsystem: simple\" >> ${{ matrix.flatpak_id }}.yml"
@@ -226,37 +226,11 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"    sources:\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"      - type: file\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        path: \$HOME/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        dest-filename: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
         
       - name: cat flatpak manifest
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ${{ matrix.flatpak_id }}.yml"
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo pwd = \$(pwd)"
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah"
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "ls -lah \$HOME/program-linux"
-
-      # - name: SYSTEMD - print env
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"env\""
-
-      # - name: print HOME
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"HOME = \$HOME\""
-
-      # - name: flatpak help
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak --help"
-
-      # - name: flatpak list
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak list"
-
-      # - name: flatpak builder help
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder --help"
-
-      # - name: flatpak builder run help
-      #   run: |
-      #     sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak run org.flatpak.Builder --run --help"
 
       - name: SYSTEMD - build flatpak package
         run: |
