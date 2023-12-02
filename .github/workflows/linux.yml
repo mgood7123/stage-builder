@@ -39,9 +39,13 @@ jobs:
         run: |
           sudo docker image load -i ./ubuntu.tar
 
-      - name: flatpak docker
-        run: |
-          python -c "import pty; pty.spawn([\"/bin/bash\", \"-i\", \"-c\", \"$(pwd)/install_systemd.sh\"])"
+      # - name: flatpak docker
+      #   run: |
+      #     python -c "import pty; pty.spawn([\"/bin/bash\", \"-i\", \"-c\", \"$(pwd)/install_systemd.sh\"])"
+
+      # - name: flatpak docker
+      #   run: |
+      #     . ./install_systemd.sh
 
       - name: create docker container
         run: |
@@ -174,7 +178,7 @@ jobs:
 
       - name: SYSTEMD - install flatpak
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo apt install -y flatpak\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo apt install -y flatpak flatpak-builder\""
 
       - name: reboot systemd - commit image
         run: |
@@ -212,10 +216,6 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo\""
 
-      - name: SYSTEMD - install flatpak builder
-        run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak install -y flathub org.flatpak.Builder\""
-
       - name: SYSTEMD - install flatpak sdk
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"sudo flatpak install -y flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08\""
@@ -243,7 +243,7 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"cat ${{ matrix.flatpak_id }}.yml\""
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"echo '${{ matrix.flatpak_id }}.yml: -- end'\""
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"ls -lah \$HOME/program-linux\""
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run org.flatpak.Builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak-builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: SYSTEMD - execute flatpak package - run
         run: |
@@ -253,7 +253,7 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mkdir flatpak-package"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "mv build-dir ${{ matrix.flatpak_id }}.yml flatpak-package"
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "flatpak run org.flatpak.Builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "flatpak-builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml" > flatpak-package/install.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo "chmod +x flatpak-package/install.sh"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "tar -cvf flatpak-package.tar flatpak-package"
 
