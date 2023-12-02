@@ -1,7 +1,6 @@
-# stop on first error
-set -e
-
 set -v
+set -e
+# stop on first error
 
 
 cat << EOF > program.c

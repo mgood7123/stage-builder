@@ -7,7 +7,7 @@ on:
 
 defaults:
   run:
-    shell: bash -i
+    shell: bash
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
 
       - name: flatpak docker
         run: |
-          bash -i -c "./install_systemd.sh"
+          ./install_systemd.sh
 
       - name: create docker container
         run: |

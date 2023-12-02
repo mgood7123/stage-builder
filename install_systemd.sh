@@ -1,6 +1,6 @@
-# stop on first error
-
+set -v
 set -e
+# stop on first error
 
 echo creating
 CONTAINER=$(sudo docker container create --user ubuntu --workdir /home/ubuntu --tmpfs /tmp --tmpfs /run --tty --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10 /bin/bash -i)
