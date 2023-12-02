@@ -26,6 +26,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: tty test
+        run: |
+          bash -i -c "ls -l /dev"
+
       - name: uncompress docker image
         run: |
           xz -d ./ubuntu.tar.xz
