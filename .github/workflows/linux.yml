@@ -26,11 +26,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: tty test
-        run: |
-          bash -i -c "ls --color /dev"
-          bash -i -c "bash -i -c \"ls --color /dev\""
-
       - name: uncompress docker image
         run: |
           xz -d ./ubuntu.tar.xz
@@ -38,14 +33,6 @@ jobs:
       - name: load docker image
         run: |
           sudo docker image load -i ./ubuntu.tar
-
-      # - name: flatpak docker
-      #   run: |
-      #     python -c "import pty; pty.spawn([\"/bin/bash\", \"-i\", \"-c\", \"$(pwd)/install_systemd.sh\"])"
-
-      # - name: flatpak docker
-      #   run: |
-      #     . ./install_systemd.sh
 
       - name: create docker container
         run: |
