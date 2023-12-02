@@ -232,9 +232,13 @@ jobs:
         run: |
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run ${{ matrix.flatpak_id }}\""
 
-      - name: copy flatpak package - bundle
+      - name: copy flatpak package - export to repo
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak build-bundle export ${{ matrix.flatpak_id }}"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak build-export smallville7123_repo build-dir"
+
+      - name: copy flatpak package - bundle from repo
+        run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "flatpak build-bundle smallville7123_repo ${{ matrix.flatpak_id }}.flatpak ${{ matrix.flatpak_id }}"
 
       - name: copy flatpak package - mkdir
         run: |
