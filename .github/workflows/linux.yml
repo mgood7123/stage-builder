@@ -16,7 +16,7 @@ jobs:
         include:
           - os: ubuntu-latest
             name: linux
-            flatpak_id: smallville7123.Hello
+            flatpak_id: com.smallville7123.Hello
 
     runs-on: ${{ matrix.os }}
     
@@ -250,7 +250,9 @@ jobs:
 
       - name: copy flatpak package - make install script
         run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"flatpak install ${{ matrix.flatpak_id }}.flatpak\" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo\" > flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"sudo flatpak install -y flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08\" >> flatpak-package/install.sh"
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"flatpak install -y ${{ matrix.flatpak_id }}.flatpak\" >> flatpak-package/install.sh"
 
       - name: copy flatpak package - chmod
         run: |
