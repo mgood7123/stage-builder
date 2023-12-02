@@ -228,12 +228,12 @@ jobs:
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        path: \$HOME/program-linux\" >> ${{ matrix.flatpak_id }}.yml"
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "echo \"        dest-filename: program-linux\" >> ${{ matrix.flatpak_id }}.yml"
         
-      - name: cat flatpak manifest
-        run: |
-          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "cat ${{ matrix.flatpak_id }}.yml"
-
       - name: SYSTEMD - build flatpak package
         run: |
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"echo '${{ matrix.flatpak_id }}.yml: -- start'\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"cat ${{ matrix.flatpak_id }}.yml\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"echo '${{ matrix.flatpak_id }}.yml: -- end'\""
+          sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"ls -lah \$HOME/program-linux\""
           sudo docker container exec --user ubuntu --workdir /home/ubuntu git_local_ubuntu bash -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u ubuntu)/bus systemd-run --user --scope --collect /bin/bash -c \"flatpak run org.flatpak.Builder -y --user --install build-dir ${{ matrix.flatpak_id }}.yml\""
 
       - name: SYSTEMD - execute flatpak package - run
