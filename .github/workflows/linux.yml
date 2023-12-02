@@ -41,7 +41,7 @@ jobs:
 
       - name: flatpak docker
         run: |
-          bash -i -c ./install_systemd.sh
+          python -c 'import pty; pty.spawn("/bin/bash -i -c ./install_systemd.sh")'
 
       - name: create docker container
         run: |
