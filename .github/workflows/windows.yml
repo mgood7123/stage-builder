@@ -35,14 +35,14 @@ jobs:
 
       - name: compile program
         run: |
-          clang program.c -O3 -g0 -o program-linux
+          clang program.c -O3 -g0 -o program-windows.exe
 
       - name: execute program
         run: |
-          ./program-linux
+          ./program-windows.exe
 
       - uses: actions/upload-artifact@v3
         with:
-          name: program-windows
-          path: ./program-windows
+          name: program-windows.exe
+          path: ./program-windows.exe
           retention-days: 1
