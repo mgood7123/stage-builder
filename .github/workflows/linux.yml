@@ -28,7 +28,8 @@ jobs:
 
       - name: tty test
         run: |
-          bash -i -c "ls -l /dev"
+          bash -i -c "ls --color /dev"
+          bash -i -c "bash -i -c \"ls --color /dev\""
 
       - name: uncompress docker image
         run: |
@@ -40,7 +41,7 @@ jobs:
 
       - name: flatpak docker
         run: |
-          ./install_systemd.sh
+          bash -i -c ./install_systemd.sh
 
       - name: create docker container
         run: |
