@@ -34,6 +34,10 @@ jobs:
         run: |
           sudo docker image load -i ./ubuntu.tar
 
+      - name: flatpak docker
+        run: |
+          ./install_systemd.sh
+
       - name: create docker container
         run: |
           sudo docker container create --user ubuntu --workdir /home/ubuntu --init --tty --tmpfs /tmp --ulimit nofile=262144:262144 --name git_local_ubuntu git_local_ubuntu:23.10
