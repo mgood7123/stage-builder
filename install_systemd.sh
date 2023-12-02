@@ -1,3 +1,4 @@
+#! /bin/env bash
 set -v
 set -e
 # stop on first error
